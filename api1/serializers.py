@@ -12,9 +12,9 @@ class StudentSerailzers(serializers.ModelSerializer):
        return Student.objects.create(**validated_data) ##key:value rakhxa
     
     def update(self,instance,validate_data):
-        instance.name = validate_data.get('name')
-        instance.roll_no = validate_data.get('roll_no')
-        instance.address = validate_data.get('address')
+        instance.name = validate_data.get('name',instance.name)
+        instance.roll_no = validate_data.get('roll_no',instance.roll_no)
+        instance.address = validate_data.get('address',instance.address)
         instance.save()
         return instance
     
