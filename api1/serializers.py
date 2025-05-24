@@ -1,11 +1,22 @@
 from rest_framework import serializers
 from .models import *
 
-class StudentSerailzers(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Student
-        fields = '__all__'
+class StudentSerailzers(serializers.Serializer):
+
+    ##validators 
+    def chare(value):
+        for c in value:
+         if c.isupper():
+            raise serializers.ValidationError("it should be in lower case")
+        return value
+
+    name = serializers.CharField(max_length=100, validators = [chare])
+    roll_no = serializers.IntegerField()
+    address = serializers.CharField(max_length=100)
+
+    # class Meta:
+    #     model = Student
+    #     fields = '__all__'
 
     #database ma create hunxa save hunxa value if validate xa vane
     def create(self, validated_data):
@@ -18,3 +29,25 @@ class StudentSerailzers(serializers.ModelSerializer):
         instance.save()
         return instance
     
+    ##field level validation
+    def validate_roll_no(self,value):
+        if value>200:
+            raise serializers.ValidationError('seat Full')
+        if Student.objects.filter(roll_no=value).exists():
+            raise serializers.ValidationError('already exists, use another number less than 200')
+    
+        return value
+      
+    ##object level validation
+    def validate(self,data):
+        address = data.get('address')
+        name = data.get('name')
+        city = ['kathmandu','bhaktapur','biratnagar','lalitpur','hetauda']
+        for c in city:
+            if address.lower() == c:
+                raise serializers.ValidationError('give a place name not city!') 
+        return data
+        
+    
+
+
