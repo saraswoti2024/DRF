@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegistrationSerializer
+from .serializers import *
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -10,7 +10,12 @@ from django.contrib.auth.models import User
 class Register(APIView):
     def post(self,request):
         try:
-            serializer = RegistrationSerializer(data=request.data) #native python
+            user_type = request.POST.get('user_type')
+            if user_type == 'student':
+                serializer = RegistrationSerializer(data=request.data)
+            else:
+                serializer = Registration2serializer(data=request.data)
+                
             if serializer.is_valid(): #validation check
                 serializer.save() #databse save
                 return Response({'message': 'user registered successfully!'},status=status.HTTP_201_CREATED)
@@ -20,7 +25,7 @@ class Register(APIView):
         
     def get(self,request):
         try:
-            data = User.objects.all()
+            data = CustomUser.objects.all()
             datas = RegistrationSerializer(data,many=True)
             return Response(datas.data,status=status.HTTP_200_OK)
         except Exception as e:
