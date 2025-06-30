@@ -1,11 +1,21 @@
 from .models import *
 from rest_framework import serializers
 
+#validators -> multiple filed ma aautai type ko validation garnu paryo vane ek ek oota lekhnu vanda yesari custom khalko panayerw field vitrw define garne
+
+def char_start_no(value):
+    char = '#!@$%^&*()_+='
+    for c in char:
+        if value[0] in c:
+            raise serializers.ValidationError('first letter shouldnot start with symbols')
+    
+    if value[0]
+    return value
 
 class CarSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True) #can only read cannot change
-    name = serializers.CharField()
-    desc = serializers.CharField()
+    name = serializers.CharField(validators=[char_start_no])
+    desc = serializers.CharField(validators=[char_start_no])
     active = serializers.BooleanField(read_only=True)
 
     def create(self,validated_data):
