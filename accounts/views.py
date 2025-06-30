@@ -15,7 +15,7 @@ class Register(APIView):
                 serializer = RegistrationSerializer(data=request.data)
             else:
                 serializer = Registration2serializer(data=request.data)
-                
+
             if serializer.is_valid(): #validation check
                 serializer.save() #databse save
                 return Response({'message': 'user registered successfully!'},status=status.HTTP_201_CREATED)

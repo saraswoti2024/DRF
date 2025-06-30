@@ -19,3 +19,12 @@ class CarSerializer(serializers.Serializer):
         instance.active = validated_data.get('active',instance.active)
         instance.save()
         return instance
+
+    #field level validation -> aauta aauta field ko validation
+    def validate_desc(self,value):
+        lengths = len(value.strip().split()) ##strip-> aagadi re paxadi ko space hatauxa ani split lae aauta aauta word , gardai split garyo so list ko form ma vayo
+        if lengths < 10 :
+            raise serializers.ValidationError('at least 10 words should be written!')
+        return value
+        
+    
