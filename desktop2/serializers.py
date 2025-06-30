@@ -23,8 +23,19 @@ class CarSerializer(serializers.Serializer):
     #field level validation -> aauta aauta field ko validation
     def validate_desc(self,value):
         lengths = len(value.strip().split()) ##strip-> aagadi re paxadi ko space hatauxa ani split lae aauta aauta word , gardai split garyo so list ko form ma vayo
-        if lengths < 10 :
+        if lengths < 3 :
             raise serializers.ValidationError('at least 10 words should be written!')
         return value
         
+    #object level validation -> multiple fields ma validation, single field wala ni garna milyo
+    def validate(self,data):
+        name = data.get('name')
+        desc = data.get('desc')
+        desc2 = desc.strip().split()
+        for c in desc2:
+            if name in c:
+                raise serializers.ValidationError('desc and name should not have any common words')
+        return data
+
+
     
