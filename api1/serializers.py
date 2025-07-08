@@ -15,24 +15,13 @@ class StudentSerailzers(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
-
-    #database ma create hunxa save hunxa value if validate xa vane
-    def create(self, validated_data):
-       return Student.objects.create(**validated_data) ##key:value rakhxa
-    
-    def update(self,instance,validate_data):
-        instance.name = validate_data.get('name',instance.name)
-        instance.roll_no = validate_data.get('roll_no',instance.roll_no)
-        instance.address = validate_data.get('address',instance.address)
-        instance.save()
-        return instance
     
     ##field level validation
     def validate_roll_no(self,value):
         if value>200:
             raise serializers.ValidationError('seat Full')
-        if Student.objects.filter(roll_no=value).exists():
-            raise serializers.ValidationError('already exists, use another number less than 200')
+        # if Student.objects.filter(roll_no=value).exists():
+        #     raise serializers.ValidationError('already exists, use another number less than 200')
         return value
       
     ##object level validation
