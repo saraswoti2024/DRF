@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/',include('api1.urls')),
     path('api2/',include('accounts.urls')),
     path('api3/',include('desktop2.urls')),
+    path('generic/',include('genericbased.urls')),
 ]
